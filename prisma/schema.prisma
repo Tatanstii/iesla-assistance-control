@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum IdentificationType {
+  CEDULA
+  TARJETA_IDENTIDAD
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id       String    @id @default(cuid())
+  name     String?
+  email    String?   @unique
+  image    String?
+  password String?
+  role     UserRole  @default(USER)
+  accounts Account[]
+  sessions Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Student {
+  id                   String                 @id @default(cuid())
+  firstName            String
+  lastName             String
+  identificationType   IdentificationType
+  identificationNumber Int                    @unique
+  email                String?
+  phone                String?
+  Group                Group?                 @relation(fields: [groupId], references: [id])
+  groupId              Int?
+  restaurantMember     Boolean                @default(false)
+  LateArrival          LateArrival[]
+  RestaurantAttendance RestaurantAttendance[]
+}
+
+model Teacher {
+  id                   String             @id @default(cuid())
+  firstName            String
+  lastName             String
+  identificationType   IdentificationType
+  identificationNumber Int                @unique
+  knowledgeArea        String
+  email                String?
+  phone                String?
+  Group                Group?             @relation(fields: [groupId], references: [id])
+  groupId              Int?
+}
+
+model Group {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  students    Student[]
+  teachers    Teacher[]
+}
+
+model LateArrival {
+  id        Int      @id @default(autoincrement())
+  studentId String
+  date      DateTime
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model RestaurantAttendance {
+  id        Int      @id @default(autoincrement())
+  studentId String
+  date      DateTime
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}

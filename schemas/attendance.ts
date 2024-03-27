@@ -1,0 +1,20 @@
+import { z } from "zod";
+
+export const LateArrivalSchema = z.object({
+  identificationNumber: z.coerce.number().min(6, {
+    message: "El número de identificación debe tener al menos 6 caracteres",
+  }),
+});
+
+export const RestaurantAttendanceSchema = z.object({
+  identificationNumber: z.coerce
+    .number()
+    .min(6, {
+      message: "El número de identificación debe tener al menos 6 caracteres",
+    })
+    .optional(),
+});
+
+export const RestaurantAttendanceStudentSchema = z.object({
+  date: z.coerce.date().optional(),
+});
