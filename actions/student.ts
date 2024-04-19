@@ -2,7 +2,6 @@
 
 import { db } from "@/lib/db";
 import { StudentSchema } from "@/schemas/student";
-import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const SUCCESS_MESSAGE_WHEN_NEW_STUDENT = "Estudiante creado";

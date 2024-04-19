@@ -10,7 +10,7 @@ export const publicRoutes = ["/"];
  * These routes will redirect logged in users to /modules
  * @type {string[]}
  */
-export const authRoutes = ["/", "/auth/register"];
+export const authRoutes = ["/"];
 
 /**
  * The prefix for API authentication routes

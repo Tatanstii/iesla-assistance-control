@@ -24,6 +24,16 @@ export const newGroup = async (data: z.infer<typeof GroupSchema>) => {
 
   const { name, description } = validateFields.data;
 
+  const groupExists = await db.group.findFirst({
+    where: {
+      name: name,
+    },
+  });
+
+  if (groupExists) {
+    return { error: "El grupo ya existe" };
+  }
+
   try {
     const group = await db.group.create({
       data: {
@@ -50,6 +60,18 @@ export const updateGroup = async (groupId: number, data: z.infer<typeof GroupSch
     return { error: INVALID_FIELDS_MESSAGE };
   }
 
+  const { name } = validateFields.data;
+
+  const groupExists = await db.group.findFirst({
+    where: {
+      name: name,
+    },
+  });
+
+  if (groupExists) {
+    return { error: "El grupo ya existe" };
+  }
+
   try {
     const group = await db.group.update({
       where: {
@@ -70,6 +92,16 @@ export const updateGroup = async (groupId: number, data: z.infer<typeof GroupSch
 };
 
 export const deleteGroup = async (groupId: number) => {
+  const students = await db.student.findMany({
+    where: {
+      groupId: groupId,
+    },
+  });
+
+  if (students.length > 0) {
+    return { error: "El grupo tiene estudiantes asignados" };
+  }
+
   try {
     await db.group.delete({
       where: {

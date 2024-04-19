@@ -1,9 +1,29 @@
 import { db } from "@/lib/db";
 import { StudentMapped } from "@/types/student";
 
-export const getStudents = async (): Promise<StudentMapped[]> => {
+export const getStudents = async ({
+  group,
+  search,
+}: {
+  group?: string;
+  search?: string;
+}): Promise<StudentMapped[]> => {
   try {
     const students = await db.student.findMany({
+      where: {
+        AND: search
+          ? [
+              {
+                OR: [{ firstName: { contains: search } }, { lastName: { contains: search } }],
+              },
+            ]
+          : [],
+        Group: {
+          name: {
+            equals: group,
+          },
+        },
+      },
       include: {
         Group: true,
       },

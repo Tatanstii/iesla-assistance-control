@@ -17,7 +17,6 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Input } from "./ui/input";
 import { useState } from "react";
 import { Button } from "./ui/button";
 
@@ -27,12 +26,7 @@ type DataTableProps<TData, TValue> = {
   filterPlaceholder?: string;
   filterKey?: string;
 };
-export default function DataTable<TData, TValue>({
-  columns,
-  data,
-  filterPlaceholder,
-  filterKey,
-}: DataTableProps<TData, TValue>) {
+export default function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
@@ -50,17 +44,6 @@ export default function DataTable<TData, TValue>({
 
   return (
     <div className="my-4">
-      {filterKey && (
-        <div className="mb-4">
-          <Input
-            placeholder={filterPlaceholder}
-            value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn(filterKey)?.setFilterValue(event.target.value)}
-            className="max-w-sm"
-          />
-        </div>
-      )}
-      
       <div className="rounded-md border">
         <Table>
           <TableHeader>

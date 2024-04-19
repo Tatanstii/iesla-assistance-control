@@ -1,4 +1,5 @@
 "use server";
+
 import { db } from "@/lib/db";
 import { RegisterSchema } from "@/schemas/register";
 import { z } from "zod";

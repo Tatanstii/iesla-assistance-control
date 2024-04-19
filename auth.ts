@@ -48,5 +48,6 @@ export const {
     signIn: "/",
     signOut: "/auth/signout",
   },
+  basePath: "/api/auth",
   ...authConfig,
 });
