@@ -81,7 +81,7 @@ export default function RestaurantAttendanceForm() {
             control={form.control}
             name="identificationNumber"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="w-full my-16">
                 <FormControl>
                   <Input {...field} type="number" placeholder="Número de identificación" />
                 </FormControl>

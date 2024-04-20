@@ -11,8 +11,14 @@ export default async function RestaurantAttendancePage() {
   return (
     <main>
       <Head title="Registrar asistencia al restaurante" />
-      <RestaurantAttendanceForm />
-      <DataTable data={restaurantAttendance} columns={restaurantAttendanceDataTableColumns} />
+      <section>
+        <div className="grid place-items-center">
+          <div>
+            <RestaurantAttendanceForm />
+            <DataTable data={restaurantAttendance} columns={restaurantAttendanceDataTableColumns} />
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

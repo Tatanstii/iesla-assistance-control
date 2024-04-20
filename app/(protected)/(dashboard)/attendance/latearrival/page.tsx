@@ -10,8 +10,14 @@ export default async function LateArrivalAttendancePage() {
   return (
     <main>
       <Head title="Registrar llegada tarde" />
-      <LateArrivalForm />
-      <DataTable data={lateArrivals} columns={lateArrivalsDataTableColumns} />
+      <section>
+        <div className="grid place-items-center">
+          <div>
+            <LateArrivalForm />
+            <DataTable data={lateArrivals} columns={lateArrivalsDataTableColumns} />
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

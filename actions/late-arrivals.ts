@@ -19,6 +19,8 @@ export const newLateArrivalAttendance = async (values: z.infer<typeof LateArriva
     },
   });
 
+  console.log(student);
+
   if (!student) {
     return { error: "El estudiante no existe" };
   }

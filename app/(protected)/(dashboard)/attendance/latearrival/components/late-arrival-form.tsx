@@ -81,9 +81,14 @@ export default function LateArrivalForm() {
             control={form.control}
             name="identificationNumber"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="w-full my-16">
                 <FormControl>
-                  <Input type="number" {...field} placeholder="123456" disabled={isPending} />
+                  <Input
+                    type="number"
+                    {...field}
+                    placeholder="Número de identificación"
+                    disabled={isPending}
+                  />
                 </FormControl>
               </FormItem>
             )}
