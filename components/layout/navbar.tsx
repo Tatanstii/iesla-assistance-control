@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import UserInfo from "../user-info";
+import { useSession } from "next-auth/react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,126 +12,59 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "../ui/navigation-menu";
-import Link from "next/link";
+import { navLinks } from "@/data/navbar";
 import { cn } from "@/lib/utils";
-import UserInfo from "../user-info";
-import { LuBarChart4, LuDoorOpen, LuLayoutGrid, LuUserCog, LuUsers } from "react-icons/lu";
-import { auth } from "@/auth";
-import { useSession } from "next-auth/react";
-
-const manageUsersLinks = [
-  {
-    title: "Gestionar usuarios del sistema",
-    href: "/admin/users",
-  },
-  {
-    title: "Gestionar estudiantes",
-    href: "/admin/students",
-  },
-];
-
-const attendanceLinks = [
-  {
-    title: "Registrar llegada tarde",
-    href: "/attendance/latearrival",
-  },
-  {
-    title: "Tomar asistencia del restaurante",
-    href: "/attendance/restaurant",
-  },
-];
 
 export default function Navbar() {
   const { data: session } = useSession();
 
+  const currentRole = session?.user.role;
+
   return (
     <div className="py-3 px-10 flex flex-row justify-between">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <Link href="/modules" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <LuLayoutGrid className="mr-2" size={18} />
-                <span>Inicio</span>
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          {session?.user.role === "ADMIN" && (
-            <NavigationMenuItem>
-              <Link href="/admin/groups" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  <LuUsers className="mr-2" size={18} />
-                  <span>Gestionar grupos</span>
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          )}
-          {session?.user.role === "ADMIN" && (
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                <LuUserCog className="mr-2" size={18} />
-                <span>Gestionar usuarios</span>
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="flex flex-col w-[300px] gap-3 p-4 ">
-                  {manageUsersLinks.map((link) => (
-                    <ListItem key={link.href} title={link.title} href={link.href} />
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          )}
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              <LuDoorOpen className="mr-2" size={18} />
-              <span>Control de asistencia</span>
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="flex flex-col w-[300px] gap-3 p-4 ">
-                {attendanceLinks.map((link) => (
-                  <ListItem key={link.href} title={link.title} href={link.href} />
-                ))}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          {session?.user.role === "ADMIN" && (
-            <NavigationMenuItem>
-              <Link href="/reports" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  <LuBarChart4 className="mr-2" size={18} />
-                  <span>Reportes</span>
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          )}
-        </NavigationMenuList>
-      </NavigationMenu>
       <div>
-        <UserInfo />
+        <NavigationMenu>
+          <NavigationMenuList>
+            {navLinks.map(
+              (item) =>
+                currentRole &&
+                item.roles.includes(currentRole) && (
+                  <NavigationMenuItem key={item.href}>
+                    {"links" in item ? (
+                      <>
+                        <NavigationMenuTrigger>
+                          <span className="mr-2">{<item.icon size={18} />}</span>
+                          {item.title}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          {item.links?.map((link) => (
+                            <NavigationMenuLink
+                              key={link.href}
+                              href={link.href}
+                              className="px-5 py-3 block text-sm min-w-[200px] hover:bg-gray-100"
+                            >
+                              {link.title}
+                            </NavigationMenuLink>
+                          ))}
+                        </NavigationMenuContent>
+                      </>
+                    ) : (
+                      <NavigationMenuLink
+                        href={item.href}
+                        className={cn("bg-primar", navigationMenuTriggerStyle())}
+                      >
+                        <span className="mr-2">{<item.icon size={18} />}</span>
+
+                        {item.title}
+                      </NavigationMenuLink>
+                    )}
+                  </NavigationMenuItem>
+                )
+            )}
+          </NavigationMenuList>
+        </NavigationMenu>
       </div>
+      <UserInfo />
     </div>
   );
 }
-
-const ListItem = React.forwardRef<React.ElementRef<"a">, React.ComponentPropsWithoutRef<"a">>(
-  ({ className, title, children, ...props }, ref) => {
-    return (
-      <li>
-        <NavigationMenuLink asChild>
-          <a
-            ref={ref}
-            className={cn(
-              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-              className
-            )}
-            {...props}
-          >
-            <div className="text-sm font-medium leading-none">{title}</div>
-            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
-          </a>
-        </NavigationMenuLink>
-      </li>
-    );
-  }
-);
-ListItem.displayName = "ListItem";

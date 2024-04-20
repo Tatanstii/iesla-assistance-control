@@ -13,14 +13,33 @@ type NavLink = {
   roles: UserRole[];
 };
 
-export const attendanceLinks = [
+const attendanceLinks = [
   {
-    title: "Registrar llegada tarde",
+    title: "Llegada tarde",
     href: "/attendance/latearrival",
   },
   {
-    title: "Tomar asistencia del restaurante",
+    title: "Ingreso al restaurante",
     href: "/attendance/restaurant",
+  },
+  {
+    title: "Ingreso al vaso de leche",
+    href: "/attendance/milk",
+  },
+];
+
+const manageEntitiesLinks = [
+  {
+    title: "Usuarios del sistema",
+    href: "/admin/users",
+  },
+  {
+    title: "Grupos",
+    href: "/admin/groups",
+  },
+  {
+    title: "Estudiantes",
+    href: "/admin/students",
   },
 ];
 
@@ -32,25 +51,13 @@ export const navLinks: NavLink[] = [
     roles: [UserRole.USER, UserRole.ADMIN],
   },
   {
-    title: "Gestionar grupos",
-    href: "/admin/groups",
-    icon: LuUsers,
-    roles: [UserRole.ADMIN],
-  },
-  {
-    title: "Gestionar usuarios del sistema",
+    title: "Gestionar entidades",
     icon: LuUserCog,
-    href: "/admin/users",
     roles: [UserRole.ADMIN],
+    links: manageEntitiesLinks,
   },
   {
-    title: "Gestionar estudiantes",
-    icon: LuUsers,
-    href: "/admin/students",
-    roles: [UserRole.ADMIN],
-  },
-  {
-    title: "Asistencia",
+    title: "Registrar asistencia",
     icon: LuDoorOpen,
     links: attendanceLinks,
     roles: [UserRole.USER, UserRole.ADMIN],

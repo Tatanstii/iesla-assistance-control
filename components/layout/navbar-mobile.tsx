@@ -1,5 +1,5 @@
 "use client";
-import { navLinks } from "@/data/nav-links";
+import { navLinks } from "@/data/navbar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import UserInfo from "../user-info";
