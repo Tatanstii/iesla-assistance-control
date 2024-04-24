@@ -28,7 +28,7 @@ export default function ConfirmDialog({
         {description && <DialogDescription>{description}</DialogDescription>}
         <div className="flex flex-row justify-end gap-3 my-4">
           <Button type="button" variant="outline" onClick={onCancel}>
-            Canclear
+            Cancelar
           </Button>
           <Button type="button" variant="destructive" onClick={onSuccess}>
             Confirmar

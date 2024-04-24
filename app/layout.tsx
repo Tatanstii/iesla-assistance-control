@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { Toaster } from "react-hot-toast";
 import Favicon from "@/public/favicon.ico";
+import UserAdminProvider from "@/providers/user-admin";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,8 +24,9 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <link rel="shortcut icon" href={Favicon.src} type="image/x-icon" sizes="32x32" />
-      <html lang="en">
+      <html lang="es">
         <body className={inter.className}>
+          <UserAdminProvider />
           <Toaster />
           {children}
         </body>

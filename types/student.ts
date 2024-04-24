@@ -8,5 +8,6 @@ export type StudentMapped = {
   email: string | null;
   phone: string | null;
   restaurantMember: boolean;
+  milkGlassMember: boolean;
   group?: string;
 };

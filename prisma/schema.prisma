@@ -80,8 +80,10 @@ model Student {
   Group                Group?                 @relation(fields: [groupId], references: [id])
   groupId              Int?
   restaurantMember     Boolean                @default(false)
+  milkGlassMember      Boolean                @default(false)
   LateArrival          LateArrival[]
   RestaurantAttendance RestaurantAttendance[]
+  MilkGlassAttendance  MilkGlassAttendance[]
 }
 
 model Teacher {
@@ -113,6 +115,13 @@ model LateArrival {
 }
 
 model RestaurantAttendance {
+  id        Int      @id @default(autoincrement())
+  studentId String
+  date      DateTime
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model MilkGlassAttendance {
   id        Int      @id @default(autoincrement())
   studentId String
   date      DateTime

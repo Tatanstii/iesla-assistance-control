@@ -31,6 +31,7 @@ export const newStudent = async (data: z.infer<typeof StudentSchema>) => {
     email,
     phone,
     restaurantMember,
+    milkGlassMember,
   } = validateFields.data;
 
   const existingUser = await db.student.findUnique({
@@ -56,6 +57,7 @@ export const newStudent = async (data: z.infer<typeof StudentSchema>) => {
           },
         },
         restaurantMember,
+        milkGlassMember,
         email,
         phone,
       },

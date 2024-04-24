@@ -126,7 +126,7 @@ export default function UserForm({ initialData }: Props) {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nombre</FormLabel>
+                    <FormLabel>Nombre*</FormLabel>
                     <FormControl>
                       <Input {...field} type="text" placeholder="Jhon Doe" disabled={isPending} />
                     </FormControl>
@@ -139,7 +139,7 @@ export default function UserForm({ initialData }: Props) {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Correo electronico</FormLabel>
+                    <FormLabel>Correo electrónico*</FormLabel>
                     <FormControl>
                       <Input
                         {...field}

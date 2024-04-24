@@ -36,6 +36,7 @@ export const getStudents = async ({
       email: student.email,
       phone: student.phone,
       restaurantMember: student.restaurantMember,
+      milkGlassMember: student.milkGlassMember,
       group: student.Group?.name,
     }));
     return studentsMapped;

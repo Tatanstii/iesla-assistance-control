@@ -19,8 +19,11 @@ export const StudentSchema = z.object({
     .min(6, {
       message: "El número de identificación debe tener al menos 6 caracteres",
     }),
-  groupId: z.number().optional(),
+  groupId: z.number({
+    required_error: "El grupo es requerido",
+  }),
   restaurantMember: z.boolean().optional(),
+  milkGlassMember: z.boolean().optional(),
   email: z.string().optional(),
   phone: z.string().optional(),
 });

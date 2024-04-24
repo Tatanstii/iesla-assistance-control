@@ -212,7 +212,7 @@ export default function StudentForm({ initData, groups }: Props) {
                   name="groupId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Grupo</FormLabel>
+                      <FormLabel>Grupo*</FormLabel>
                       <Select
                         onValueChange={(value) => field.onChange(parseInt(value))}
                         defaultValue={field.value?.toString()}
@@ -228,26 +228,47 @@ export default function StudentForm({ initData, groups }: Props) {
                               {name}
                             </SelectItem>
                           ))}
+                          {!groups.length && (
+                            <div className="p-2 grid place-items-center">
+                              <small>No hay grupos registrados</small>
+                            </div>
+                          )}
                         </SelectContent>
                       </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="restaurantMember"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Miembro de restaurante</FormLabel>
-                      <FormControl>
-                        <div className="flex items-center">
-                          <Switch checked={field.value} onCheckedChange={field.onChange} />
-                        </div>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="restaurantMember"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Miembro de restaurante</FormLabel>
+                        <FormControl>
+                          <div className="flex items-center">
+                            <Switch checked={field.value} onCheckedChange={field.onChange} />
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="milkGlassMember"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Miembro de vaso de leche</FormLabel>
+                        <FormControl>
+                          <div className="flex items-center">
+                            <Switch checked={field.value} onCheckedChange={field.onChange} />
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={form.control}
                   name="email"

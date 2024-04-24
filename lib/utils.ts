@@ -1,5 +1,9 @@
+import { User } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import bcrypt from "bcrypt";
+import { z } from "zod";
+import { RegisterSchema } from "../schemas/register";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

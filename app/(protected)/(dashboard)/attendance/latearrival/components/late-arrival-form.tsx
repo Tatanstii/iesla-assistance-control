@@ -1,17 +1,15 @@
 "use client";
 
 import { newLateArrivalAttendance } from "@/actions/late-arrivals";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormDescription, FormField, FormItem } from "@/components/ui/form";
 import { LateArrivalSchema } from "@/schemas/attendance";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import PulseLoader from "react-spinners/PulseLoader";
 import { z } from "zod";
+import BarcodeInput from "@/components/inputs/barcode";
 
 export default function LateArrivalForm() {
   const [isPending, setIsPending] = useState(false);
@@ -75,28 +73,23 @@ export default function LateArrivalForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-xl">
         <div className="flex flex-row justify-center items-center gap-3 w-full">
           <FormField
             control={form.control}
             name="identificationNumber"
             render={({ field }) => (
-              <FormItem className="w-full my-16">
+              <FormItem className="w-full my-10">
                 <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    placeholder="Número de identificación"
-                    disabled={isPending}
-                  />
+                  <BarcodeInput {...field} isPending={isPending} />
                 </FormControl>
+                <FormDescription>
+                  Ingresa el numero de identificación del estudiante o escanea el código de barras
+                  del estudiante para registrar la llegada tarde
+                </FormDescription>
               </FormItem>
             )}
           />
-
-          <Button type="submit" disabled={isPending}>
-            {isPending ? <PulseLoader size={10} color="#fff" /> : "Registrar"}
-          </Button>
         </div>
       </form>
     </Form>

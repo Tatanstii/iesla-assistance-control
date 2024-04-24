@@ -29,6 +29,13 @@ export const studentDataTableColumns: ColumnDef<StudentMapped>[] = [
     },
   },
   {
+    accessorKey: "milkGlassMember",
+    header: "Miembro del vaso de leche",
+    cell: ({ row }) => {
+      return row.original.milkGlassMember ? "Sí" : "No";
+    },
+  },
+  {
     accessorKey: "phone",
     header: "Teléfono",
   },

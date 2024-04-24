@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { LateArrivalSchema } from "@/schemas/attendance";
+import { format } from "date-fns";
 import { z } from "zod";
 
 export const newLateArrivalAttendance = async (values: z.infer<typeof LateArrivalSchema>) => {
@@ -19,10 +20,12 @@ export const newLateArrivalAttendance = async (values: z.infer<typeof LateArriva
     },
   });
 
-  console.log(student);
-
   if (!student) {
     return { error: "El estudiante no existe" };
+  }
+
+  if (!student.milkGlassMember) {
+    return { error: "El estudiante no es miembro del vaso de leche" };
   }
 
   const alreadyRegistered = await db.lateArrival.findFirst({
@@ -76,17 +79,8 @@ export const getLateArrivals = async () => {
     });
     const mappedLateArrivals = lateArrivals.map((lateArrival) => {
       return {
-        id: lateArrival.id,
-        student: `${lateArrival.student.firstName} ${lateArrival.student.lastName}`,
-        identificationType: lateArrival.student.identificationType,
-        identificationNumber: lateArrival.student.identificationNumber,
-        date: new Intl.DateTimeFormat("es-CO", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-        }).format(lateArrival.date),
+        date: format(lateArrival.date, "dd/MM/yyyy HH:mm"),
+        student: lateArrival.student,
       };
     });
     return mappedLateArrivals;

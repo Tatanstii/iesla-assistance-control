@@ -2,11 +2,16 @@ import React from "react";
 import LateArrivalForm from "./components/late-arrival-form";
 import Head from "@/components/head";
 import { getLateArrivals } from "@/actions/late-arrivals";
-import DataTable from "@/components/data-table";
-import { lateArrivalsDataTableColumns } from "./components/columns";
+import AssistanceList from "@/components/assistance-list";
 
 export default async function LateArrivalAttendancePage() {
   const lateArrivals = await getLateArrivals();
+
+  const filteredLateArrivals = lateArrivals.map((lateArrival) => ({
+    date: lateArrival.date,
+    student: lateArrival.student,
+  }));
+
   return (
     <main>
       <Head title="Registrar llegada tarde" />
@@ -14,7 +19,7 @@ export default async function LateArrivalAttendancePage() {
         <div className="grid place-items-center">
           <div>
             <LateArrivalForm />
-            <DataTable data={lateArrivals} columns={lateArrivalsDataTableColumns} />
+            <AssistanceList data={filteredLateArrivals} />
           </div>
         </div>
       </section>

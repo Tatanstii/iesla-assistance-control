@@ -1,64 +1,56 @@
 "use client";
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RestaurantAttendanceSchema } from "@/schemas/attendance";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import PulseLoader from "react-spinners/PulseLoader";
-import { z } from "zod";
-import { newRestaurantAttendance } from "@/actions/restaurant-attendance";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { newMilkGlassAssistance } from "@/actions/milk-glass-assistance";
 import BarcodeInput from "@/components/inputs/barcode";
+import { Form, FormControl, FormDescription, FormField, FormItem } from "@/components/ui/form";
+import { MilkGlassAttendanceSchema } from "@/schemas/attendance";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { z } from "zod";
 
-export default function RestaurantAttendanceForm() {
+type Values = z.infer<typeof MilkGlassAttendanceSchema>;
+
+export default function AttendanceGlassMilkForm() {
   const [isPending, setIsPending] = useState(false);
+
   const timeout = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
   const form = useForm({
-    resolver: zodResolver(RestaurantAttendanceSchema),
+    resolver: zodResolver(MilkGlassAttendanceSchema),
   });
 
   const watchIdentificationNumber = form.watch("identificationNumber");
 
-  const onSubmit = async (values: z.infer<typeof RestaurantAttendanceSchema>) => {
+  const onSubmit = async (values: Values) => {
     if (timeout.current) {
       clearTimeout(timeout.current);
     }
     setIsPending(true);
     try {
-      await newRestaurantAttendance(values).then((response) => {
-        if (response.success) {
-          toast.success(response.success);
-        }
-        if (response.error) {
-          toast.error(response.error);
-        }
-        form.reset({
-          identificationNumber: NaN,
-        });
-        router.refresh();
+      const response = await newMilkGlassAssistance(values);
+      if (response.error) {
+        toast.error(response.error);
+      }
+      if (response.success) {
+        toast.success("Asistencia registrada correctamente");
+      }
+      form.reset({
+        identificationNumber: NaN,
       });
+      router.refresh();
     } catch (error) {
-      toast.error("Error al registrar la asistencia");
+      toast.error("Ocurrió un error al registrar la asistencia al vaso de leche");
     } finally {
       setIsPending(false);
     }
   };
 
   useEffect(() => {
-    const validateFields = RestaurantAttendanceSchema.safeParse(form.getValues());
+    const validateFields = MilkGlassAttendanceSchema.safeParse(form.getValues());
     if (!validateFields.success) {
       return;
     }
@@ -83,7 +75,7 @@ export default function RestaurantAttendanceForm() {
 
   return (
     <Form {...form}>
-      <form className="space-y-6 max-w-xl" onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-w-xl">
         <div className="flex flex-row justify-center items-center gap-3 w-full">
           <FormField
             control={form.control}
@@ -91,11 +83,11 @@ export default function RestaurantAttendanceForm() {
             render={({ field }) => (
               <FormItem className="w-full my-10">
                 <FormControl>
-                  <BarcodeInput {...field} />
+                  <BarcodeInput {...field} disabled={isPending} />
                 </FormControl>
                 <FormDescription>
                   Ingresa el numero de identificación del estudiante o escanea el código de barras
-                  del estudiante para registrar la asistencia al restaurante
+                  del estudiante para registrar la asistencia al vaso de leche
                 </FormDescription>
               </FormItem>
             )}

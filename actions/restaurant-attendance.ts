@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { RestaurantAttendanceSchema } from "@/schemas/attendance";
+import { format } from "date-fns";
 import { z } from "zod";
 
 export const newRestaurantAttendance = async (
@@ -69,6 +70,15 @@ export const newRestaurantAttendance = async (
 export const getRestaurantAttendance = async () => {
   try {
     const restaurantAttendance = await db.restaurantAttendance.findMany({
+      where: {
+        date: {
+          gte: new Date(new Date().setHours(0, 0, 0, 0)),
+          lte: new Date(new Date().setHours(23, 59, 59, 999)),
+        },
+      },
+      orderBy: {
+        date: "desc",
+      },
       include: {
         student: true,
       },
@@ -76,17 +86,8 @@ export const getRestaurantAttendance = async () => {
 
     const mappedRestaurantAttendance = restaurantAttendance.map((attendance) => {
       return {
-        id: attendance.id,
-        student: `${attendance.student.firstName} ${attendance.student.lastName}`,
-        identificationType: attendance.student.identificationType,
-        identificationNumber: attendance.student.identificationNumber,
-        date: new Intl.DateTimeFormat("es-CO", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-        }).format(attendance.date),
+        date: format(new Date(attendance.date), "dd/MM/yyyy HH:mm"),
+        student: attendance.student,
       };
     });
 
