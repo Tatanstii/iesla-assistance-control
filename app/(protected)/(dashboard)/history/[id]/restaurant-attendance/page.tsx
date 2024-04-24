@@ -6,6 +6,7 @@ import { getRestaurantAttendanceByStudent } from "@/actions/restaurant-attendanc
 import DataTable from "@/components/data-table";
 import { attendanceRestaurantColumns } from "./components/columns";
 import AttendanceResutarantStudentForm from "./components/attendance-resutarant-student-form";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: {
@@ -19,6 +20,11 @@ type Props = {
 
 export default async function RestaurantAttendancePage({ params, searchParams }: Props) {
   const student = await getStudentById(params.id);
+
+  if (!student) {
+    notFound();
+  }
+
   const attendanceRestaurant = await getRestaurantAttendanceByStudent(params.id, searchParams.date);
 
   return (

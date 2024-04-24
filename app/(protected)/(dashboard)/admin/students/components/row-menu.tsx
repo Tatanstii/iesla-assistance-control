@@ -49,11 +49,15 @@ export default function StudentRowMenu({ studentId }: Props) {
   };
 
   const handleOnLateArrival = () => {
-    router.push(`${STUDENTS_PATH}/${studentId}/latearrivals`);
+    router.push(`/history/${studentId}/latearrivals`);
   };
 
   const handleOnRestauranAttendance = () => {
-    router.push(`${STUDENTS_PATH}/${studentId}/restaurant-attendance`);
+    router.push(`/history/${studentId}/restaurant-attendance`);
+  };
+
+  const handleOnMilkGlassAttendance = () => {
+    router.push(`/history/${studentId}/milk-glass-attendance`);
   };
 
   return (
@@ -88,6 +92,13 @@ export default function StudentRowMenu({ studentId }: Props) {
             >
               <LuClock size={18} className="mr-4" />
               <span>Ver asistencias al restaurante</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="hover:cursor-pointer"
+              onClick={handleOnMilkGlassAttendance}
+            >
+              <LuClock size={18} className="mr-4" />
+              <span>Ver asistencias al vaso de leche</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

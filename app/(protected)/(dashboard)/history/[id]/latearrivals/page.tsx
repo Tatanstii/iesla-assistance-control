@@ -5,6 +5,7 @@ import { getLateArrivalsByStudent } from "@/actions/late-arrivals";
 import Head from "@/components/head";
 import { getStudentById } from "@/data/student";
 import BackButton from "@/components/back-button";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: {
@@ -17,7 +18,13 @@ type Props = {
 
 export default async function LateArrivalsPage({ params, searchParams }: Props) {
   const student = await getStudentById(params.id);
+
+  if (!student) {
+    notFound();
+  }
+
   const lateStudentArrivals = await getLateArrivalsByStudent(params.id, searchParams.date);
+
   return (
     <main>
       <BackButton backPath="/admin/students" />

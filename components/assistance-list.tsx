@@ -4,10 +4,10 @@ import { FaUsersSlash } from "react-icons/fa";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { PiStudentDuotone } from "react-icons/pi";
 import { Separator } from "./ui/separator";
-import { Button } from "./ui/button";
 import { LuHistory } from "react-icons/lu";
 import Link from "next/link";
 import { ScrollArea } from "./ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 type Record = {
   date: string;
@@ -16,11 +16,16 @@ type Record = {
 
 type Props = {
   data: Record[];
+  pathname: string;
 };
 
-export default function AssistanceList({ data }: Props) {
+export default function AssistanceList({ data, pathname }: Props) {
   return (
-    <ScrollArea className="h-[300px] rounded-md bg-gray-100 shadow px-10 py-5">
+    <ScrollArea
+      className={cn("h-fit rounded-md bg-gray-100 shadow px-10 py-5", {
+        "h-[300px]": data.length,
+      })}
+    >
       {!data.length && (
         <div className="flex flex-col items-center justify-center w-full gap-5">
           <FaUsersSlash className="text-gray-400" size={40} />
@@ -44,7 +49,7 @@ export default function AssistanceList({ data }: Props) {
               </div>
               <div>
                 <Link
-                  href={`/admin/students/${record.student.id}/latearrivals`}
+                  href={`/history/${record.student.id}/${pathname}`}
                   title={`Ver historial del estudiante ${record.student.firstName}`}
                   className="block rounded-md bg-primary text-white p-3 hover:bg-primary/80 transition"
                 >

@@ -1,6 +1,6 @@
 "use client";
 
-import { newMilkGlassAssistance } from "@/actions/milk-glass-assistance";
+import { newMilkGlassAssistance } from "@/actions/milk-glass-attendance";
 import BarcodeInput from "@/components/inputs/barcode";
 import { Form, FormControl, FormDescription, FormField, FormItem } from "@/components/ui/form";
 import { MilkGlassAttendanceSchema } from "@/schemas/attendance";

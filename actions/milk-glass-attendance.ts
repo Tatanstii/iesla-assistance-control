@@ -5,7 +5,7 @@ import { MilkGlassAttendanceSchema } from "@/schemas/attendance";
 import { format } from "date-fns";
 import { z } from "zod";
 
-export const newMilkGlassAssistance = async (values: z.infer<typeof MilkGlassAttendanceSchema>) => {
+export const newMilkGlassAttendance = async (values: z.infer<typeof MilkGlassAttendanceSchema>) => {
   const validateFields = MilkGlassAttendanceSchema.safeParse(values);
 
   if (!validateFields.success) {
@@ -59,7 +59,7 @@ export const newMilkGlassAssistance = async (values: z.infer<typeof MilkGlassAtt
   }
 };
 
-export const getMilkGlassAssistance = async () => {
+export const getMilkGlassAttendance = async () => {
   try {
     const milkGlassAssistance = await db.milkGlassAttendance.findMany({
       where: {
@@ -79,6 +79,36 @@ export const getMilkGlassAssistance = async () => {
       date: format(new Date(record.date), "dd/MM/yyyy HH:mm"),
       student: record.student,
     }));
+  } catch (error) {
+    return [];
+  }
+};
+
+export const getMilkGlassAttendanceByStudent = async (studentId: string, date: Date) => {
+  try {
+    if (!date) {
+      return await db.milkGlassAttendance.findMany({
+        where: {
+          studentId,
+        },
+      });
+    }
+    const milkGlassAssistance = await db.milkGlassAttendance.findMany({
+      where: {
+        studentId,
+        date: {
+          gte: new Date(date.setHours(0, 0, 0, 0)),
+          lte: new Date(date.setHours(23, 59, 59, 999)),
+        },
+      },
+      orderBy: {
+        date: "desc",
+      },
+      include: {
+        student: true,
+      },
+    });
+    return milkGlassAssistance;
   } catch (error) {
     return [];
   }

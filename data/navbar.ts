@@ -66,6 +66,6 @@ export const navLinks: NavLink[] = [
     title: "Reportes",
     icon: LuBarChart4,
     href: "/reports",
-    roles: [UserRole.ADMIN],
+    roles: [UserRole.ADMIN, UserRole.USER],
   },
 ];

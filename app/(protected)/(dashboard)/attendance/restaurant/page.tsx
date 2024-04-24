@@ -14,7 +14,7 @@ export default async function RestaurantAttendancePage() {
         <div className="grid place-items-center">
           <div>
             <RestaurantAttendanceForm />
-            <AssistanceList data={restaurantAttendance} />
+            <AssistanceList data={restaurantAttendance} pathname="restaurant-attendance" />
           </div>
         </div>
       </section>

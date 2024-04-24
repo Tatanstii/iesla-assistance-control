@@ -24,10 +24,6 @@ export const newLateArrivalAttendance = async (values: z.infer<typeof LateArriva
     return { error: "El estudiante no existe" };
   }
 
-  if (!student.milkGlassMember) {
-    return { error: "El estudiante no es miembro del vaso de leche" };
-  }
-
   const alreadyRegistered = await db.lateArrival.findFirst({
     where: {
       studentId: student.id,

@@ -1,10 +1,10 @@
 import Head from "@/components/head";
 import AttendanceGlassMilkForm from "./components/attendance-glass-milk-form";
 import AssistanceList from "@/components/assistance-list";
-import { getMilkGlassAssistance } from "@/actions/milk-glass-assistance";
+import { getMilkGlassAttendance } from "@/actions/milk-glass-attendance";
 
 export default async function AttendanceGlassMilkPage() {
-  const milkGlassAssistance = await getMilkGlassAssistance();
+  const milkGlassAttendance = await getMilkGlassAttendance();
 
   return (
     <main>
@@ -13,7 +13,7 @@ export default async function AttendanceGlassMilkPage() {
         <div className="grid place-items-center">
           <div>
             <AttendanceGlassMilkForm />
-            <AssistanceList data={milkGlassAssistance} />
+            <AssistanceList data={milkGlassAttendance} pathname="milk-glass-attendance" />
           </div>
         </div>
       </section>

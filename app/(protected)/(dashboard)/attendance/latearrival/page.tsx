@@ -19,7 +19,7 @@ export default async function LateArrivalAttendancePage() {
         <div className="grid place-items-center">
           <div>
             <LateArrivalForm />
-            <AssistanceList data={filteredLateArrivals} />
+            <AssistanceList data={filteredLateArrivals} pathname="latearrivals" />
           </div>
         </div>
       </section>
