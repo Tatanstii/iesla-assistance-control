@@ -4,8 +4,11 @@ import { format } from "date-fns";
 import { NextRequest } from "next/server";
 import xlsx from "xlsx";
 
-const LATE_ARRIVALS_SHEET_NAME = "Reporte de llegadas tardes";
-const LATE_ARRIVALS_FILE_NAME = `${format(new Date(), "yyyy-MM-dd")}-llegadas-tarde.xlsx`;
+const RESTAURANT_ATTENDANCE_SHEET_NAME = "Asistencias al restaurante";
+const RESTAURANT_ATTENDANCE_FILE_NAME = `${format(
+  new Date(),
+  "yyyy-MM-dd"
+)}-asistencia-restaurante.xlsx`;
 
 export async function GET(request: NextRequest) {
   try {
@@ -30,7 +33,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const lateArrivals = await db.lateArrival.findMany({
+    const restaurantAttendance = await db.restaurantAttendance.findMany({
       where: {
         date: {
           gte: startDate,
@@ -44,7 +47,7 @@ export async function GET(request: NextRequest) {
 
     const workbook = xlsx.utils.book_new();
     const worksheet = xlsx.utils.json_to_sheet(
-      lateArrivals.map((record) => {
+      restaurantAttendance.map((record) => {
         console.log(format(new Date(record.date), "yyyy-MM-dd"));
         return {
           "Fecha de registro": format(new Date(record.date), "yyyy-MM-dd hh:mm a"),
@@ -57,17 +60,17 @@ export async function GET(request: NextRequest) {
       })
     );
 
-    xlsx.utils.book_append_sheet(workbook, worksheet, LATE_ARRIVALS_SHEET_NAME);
+    xlsx.utils.book_append_sheet(workbook, worksheet, RESTAURANT_ATTENDANCE_SHEET_NAME);
 
     const buffer = xlsx.write(workbook, { type: "buffer", bookType: "xlsx" });
 
-    if (!lateArrivals.length) {
+    if (!restaurantAttendance.length) {
       return new Response("No hay datos para mostrar en el reporte", { status: 404 });
     }
     return new Response(buffer, {
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": `attachment; filename="${LATE_ARRIVALS_FILE_NAME}"`,
+        "Content-Disposition": `attachment; filename="${RESTAURANT_ATTENDANCE_FILE_NAME}"`,
       },
     });
   } catch (error) {

@@ -4,8 +4,8 @@ import { format } from "date-fns";
 import { NextRequest } from "next/server";
 import xlsx from "xlsx";
 
-const LATE_ARRIVALS_SHEET_NAME = "Reporte de llegadas tardes";
-const LATE_ARRIVALS_FILE_NAME = `${format(new Date(), "yyyy-MM-dd")}-llegadas-tarde.xlsx`;
+const MILK_GLASS_SHEET_NAME = "Asistencias al vaso de leche";
+const MILK_GLASS_FILE_NAME = `${format(new Date(), "yyyy-MM-dd")}-asistencia-vaso-leche.xlsx`;
 
 export async function GET(request: NextRequest) {
   try {
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const lateArrivals = await db.lateArrival.findMany({
+    const milkGlassAttendance = await db.milkGlassAttendance.findMany({
       where: {
         date: {
           gte: startDate,
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     const workbook = xlsx.utils.book_new();
     const worksheet = xlsx.utils.json_to_sheet(
-      lateArrivals.map((record) => {
+      milkGlassAttendance.map((record) => {
         console.log(format(new Date(record.date), "yyyy-MM-dd"));
         return {
           "Fecha de registro": format(new Date(record.date), "yyyy-MM-dd hh:mm a"),
@@ -57,17 +57,17 @@ export async function GET(request: NextRequest) {
       })
     );
 
-    xlsx.utils.book_append_sheet(workbook, worksheet, LATE_ARRIVALS_SHEET_NAME);
+    xlsx.utils.book_append_sheet(workbook, worksheet, MILK_GLASS_SHEET_NAME);
 
     const buffer = xlsx.write(workbook, { type: "buffer", bookType: "xlsx" });
 
-    if (!lateArrivals.length) {
+    if (!milkGlassAttendance.length) {
       return new Response("No hay datos para mostrar en el reporte", { status: 404 });
     }
     return new Response(buffer, {
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": `attachment; filename="${LATE_ARRIVALS_FILE_NAME}"`,
+        "Content-Disposition": `attachment; filename="${MILK_GLASS_FILE_NAME}"`,
       },
     });
   } catch (error) {

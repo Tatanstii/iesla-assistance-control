@@ -38,3 +38,13 @@ export const getLocaleDateTime = (date: Date) => {
 export const getLocaleTime = (date: Date) => {
   return date.toLocaleString("es-CO", { hour: "numeric", minute: "numeric" });
 };
+
+export const downloadFile = (blob: Blob, fileName: string) => {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", fileName);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};

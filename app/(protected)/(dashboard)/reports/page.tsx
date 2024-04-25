@@ -1,24 +1,27 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LateArrivalReportForm from "./components/late-arrivals-report-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import LateArrivalsForm from "./components/late-arrivals-form";
+import { HeaderTitle } from "@/components/header-options";
+import RestaurantAttendanceForm from "./components/restaurant-attendance-form";
+import MilkGlassAttendanceForm from "./components/milk-glass-attendance-form";
 
 const tabs = [
   {
     label: "Llegadas tardes",
     value: "late-arrivals",
-    component: LateArrivalReportForm,
+    component: LateArrivalsForm,
   },
   {
     label: "Asistencias al restaurante",
     value: "restaurant-attendance",
 
-    component: LateArrivalReportForm,
+    component: RestaurantAttendanceForm,
   },
   {
-    label: "Asistencias a vaso de leche",
+    label: "Asistencias al vaso de leche",
     value: "milk-glass-attendance",
 
-    component: LateArrivalReportForm,
+    component: MilkGlassAttendanceForm,
   },
 ];
 
@@ -36,7 +39,8 @@ export default function ReportsPage() {
         <TabsContent key={tab.value} value={tab.value}>
           <Card>
             <CardHeader>
-              <CardTitle>Generar reporte - {tab.label}</CardTitle>
+              <small>Generar reporte</small>
+              <HeaderTitle>{tab.label}</HeaderTitle>
             </CardHeader>
             <CardContent>
               <div className="grid place-items-center px-20 py-10">{<tab.component />}</div>

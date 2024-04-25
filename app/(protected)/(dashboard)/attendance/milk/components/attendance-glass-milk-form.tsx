@@ -1,6 +1,6 @@
 "use client";
 
-import { newMilkGlassAssistance } from "@/actions/milk-glass-attendance";
+import { newMilkGlassAttendance } from "@/actions/milk-glass-attendance";
 import BarcodeInput from "@/components/inputs/barcode";
 import { Form, FormControl, FormDescription, FormField, FormItem } from "@/components/ui/form";
 import { MilkGlassAttendanceSchema } from "@/schemas/attendance";
@@ -31,7 +31,7 @@ export default function AttendanceGlassMilkForm() {
     }
     setIsPending(true);
     try {
-      const response = await newMilkGlassAssistance(values);
+      const response = await newMilkGlassAttendance(values);
       if (response.error) {
         toast.error(response.error);
       }
