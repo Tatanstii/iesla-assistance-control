@@ -15,7 +15,7 @@ export const RestaurantAttendanceSchema = z.object({
     .optional(),
 });
 
-export const RestaurantAttendanceStudentSchema = z.object({
+export const FilterAttendance = z.object({
   date: z.coerce.date().optional(),
 });
 

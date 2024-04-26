@@ -10,7 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { LateStudentArrivalSchema } from "@/schemas/late-arrival";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -19,9 +18,10 @@ import { format } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { LuCalendar, LuX } from "react-icons/lu";
+import { FilterAttendance } from "@/schemas/attendance";
 
-export default function LateStudentArrivalForm() {
-  const defaultValues: z.infer<typeof LateStudentArrivalSchema> = {
+export default function MilkGlassAttendanceFilterForm() {
+  const defaultValues: z.infer<typeof FilterAttendance> = {
     date: undefined,
   };
 
@@ -31,19 +31,19 @@ export default function LateStudentArrivalForm() {
   const studentId = params.id;
 
   const form = useForm({
-    resolver: zodResolver(LateStudentArrivalSchema),
+    resolver: zodResolver(FilterAttendance),
     defaultValues,
   });
 
-  const onSubmit = (values: z.infer<typeof LateStudentArrivalSchema>) => {
+  const onSubmit = (values: z.infer<typeof FilterAttendance>) => {
     if (values.date) {
-      router.push(`/history/${studentId}/latearrivals?date=${values.date}`);
+      router.push(`/history/${studentId}/milk-glass-attendance?date=${values.date}`);
     }
   };
 
   const clearFieldDate = () => {
     form.setValue("date", undefined);
-    router.push(`/history/${studentId}/latearrivals`);
+    router.push(`/history/${studentId}/milk-glass-attendance`);
     router.refresh();
   };
 

@@ -5,6 +5,7 @@ import Head from "@/components/head";
 import { getStudentById } from "@/data/student";
 import { notFound } from "next/navigation";
 import { milkGlassAttendanceDataTableColumns } from "./components/columns";
+import MilkGlassAttendanceFilterForm from "./components/milk-glass-attendance-filter-form";
 
 type Props = {
   params: {
@@ -30,6 +31,9 @@ export default async function MilkGlassAttendancePage({ params, searchParams }: 
       {student && (
         <Head title={`Asistencia al vaso de leche 👨‍🎓 ${student.firstName} ${student.lastName}`} />
       )}
+      <div className="mb-4">
+        <MilkGlassAttendanceFilterForm />
+      </div>
       {milkGlassAttendance && (
         <DataTable data={milkGlassAttendance} columns={milkGlassAttendanceDataTableColumns} />
       )}

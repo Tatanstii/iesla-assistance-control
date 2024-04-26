@@ -18,10 +18,10 @@ import { format } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { LuCalendar, LuX } from "react-icons/lu";
-import { RestaurantAttendanceStudentSchema } from "@/schemas/attendance";
+import { FilterAttendance } from "@/schemas/attendance";
 
 export default function AttendanceResutarantStudentForm() {
-  const defaultValues: z.infer<typeof RestaurantAttendanceStudentSchema> = {
+  const defaultValues: z.infer<typeof FilterAttendance> = {
     date: undefined,
   };
 
@@ -31,19 +31,19 @@ export default function AttendanceResutarantStudentForm() {
   const studentId = params.id;
 
   const form = useForm({
-    resolver: zodResolver(RestaurantAttendanceStudentSchema),
+    resolver: zodResolver(FilterAttendance),
     defaultValues,
   });
 
-  const onSubmit = (values: z.infer<typeof RestaurantAttendanceStudentSchema>) => {
+  const onSubmit = (values: z.infer<typeof FilterAttendance>) => {
     if (values.date) {
-      router.push(`/admin/students/${studentId}/restaurant-attendance?date=${values.date}`);
+      router.push(`/history/${studentId}/restaurant-attendance?date=${values.date}`);
     }
   };
 
   const clearFieldDate = () => {
     form.setValue("date", undefined);
-    router.push(`/admin/students/${studentId}/restaurant-attendance`);
+    router.push(`/history/${studentId}/restaurant-attendance`);
     router.refresh();
   };
 
