@@ -18,6 +18,7 @@ export default function BarcodeInput({ isPending = false, ...props }: Props) {
           props.className
         )}
         min={0}
+        autoFocus={true}
       />
       <span className="absolute right-0 mr-4">
         <IoBarcodeOutline size={28} className="text-primary" />

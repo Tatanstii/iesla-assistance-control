@@ -6,39 +6,39 @@ import { format } from "date-fns";
 import { z } from "zod";
 
 export const newLateArrivalAttendance = async (values: z.infer<typeof LateArrivalSchema>) => {
-  const validateFields = LateArrivalSchema.safeParse(values);
-
-  if (!validateFields.success) {
-    return { error: "Campos invalidos" };
-  }
-
-  const { identificationNumber } = validateFields.data;
-
-  const student = await db.student.findUnique({
-    where: {
-      identificationNumber,
-    },
-  });
-
-  if (!student) {
-    return { error: "El estudiante no existe" };
-  }
-
-  const alreadyRegistered = await db.lateArrival.findFirst({
-    where: {
-      studentId: student.id,
-      date: {
-        gte: new Date(new Date().setHours(0, 0, 0, 0)),
-        lte: new Date(new Date().setHours(23, 59, 59, 999)),
-      },
-    },
-  });
-
-  if (alreadyRegistered) {
-    return { error: "El estudiante ya tiene una llegada tarde registrada el día de hoy" };
-  }
-
   try {
+    const validateFields = LateArrivalSchema.safeParse(values);
+
+    if (!validateFields.success) {
+      return { error: "Campos invalidos" };
+    }
+
+    const { identificationNumber } = validateFields.data;
+
+    const student = await db.student.findUnique({
+      where: {
+        identificationNumber,
+      },
+    });
+
+    if (!student) {
+      return { error: "El estudiante no existe" };
+    }
+
+    const alreadyRegistered = await db.lateArrival.findFirst({
+      where: {
+        studentId: student.id,
+        date: {
+          gte: new Date(new Date().setHours(0, 0, 0, 0)),
+          lte: new Date(new Date().setHours(23, 59, 59, 999)),
+        },
+      },
+    });
+
+    if (alreadyRegistered) {
+      return { error: "El estudiante ya tiene una llegada tarde registrada el día de hoy" };
+    }
+
     await db.lateArrival.create({
       data: {
         student: {

@@ -22,15 +22,20 @@ export async function GET(request: NextRequest) {
     });
 
     if (!validateFields.success) {
-      return new Response("Campos invalidos", { status: 400 });
+      return new Response("Campos invalidos", { status: 404 });
     }
 
     const { startDate, endDate = new Date() } = validateFields.data;
 
     if (startDate > endDate) {
-      return new Response("La fecha de inicio no puede ser mayor a la fecha de fin", {
-        status: 400,
-      });
+      return new Response(
+        JSON.stringify({
+          message: "La fecha de inicio no puede ser mayor a la fecha de fin",
+        }),
+        {
+          status: 404,
+        }
+      );
     }
 
     const restaurantAttendance = await db.restaurantAttendance.findMany({
@@ -45,10 +50,18 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    if (!restaurantAttendance.length) {
+      return new Response(
+        JSON.stringify({
+          message: "No hay registros en el rango de fechas seleccionado",
+        }),
+        { status: 404 }
+      );
+    }
+
     const workbook = xlsx.utils.book_new();
     const worksheet = xlsx.utils.json_to_sheet(
       restaurantAttendance.map((record) => {
-        console.log(format(new Date(record.date), "yyyy-MM-dd"));
         return {
           "Fecha de registro": format(new Date(record.date), "yyyy-MM-dd hh:mm a"),
           "Nombre del estudiante": `${record.student.firstName} ${record.student.lastName}`,
@@ -64,9 +77,6 @@ export async function GET(request: NextRequest) {
 
     const buffer = xlsx.write(workbook, { type: "buffer", bookType: "xlsx" });
 
-    if (!restaurantAttendance.length) {
-      return new Response("No hay datos para mostrar en el reporte", { status: 404 });
-    }
     return new Response(buffer, {
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -74,6 +84,11 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    return new Response("Error al generar el reporte", { status: 500 });
+    return new Response(
+      JSON.stringify({
+        message: "Error al generar el reporte",
+      }),
+      { status: 500 }
+    );
   }
 }
